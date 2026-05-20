@@ -1,0 +1,16 @@
+groups:
+  - name: guardianstack-alerts
+
+    rules:
+
+      - alert: FlaskAppDown
+
+        expr: up{job="flask-app"} == 0
+
+        for: 10s
+
+        labels:
+          severity: critical
+
+        annotations:
+          summary: "Flask app is DOWN"
