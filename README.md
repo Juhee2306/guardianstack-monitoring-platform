@@ -173,11 +173,13 @@ The deployment includes:
 
 ## Prometheus Targets
 
-![Prometheus Targets](./screenshots/prometheus-targets.png)
+![Prometheus Targets](./screenshots/prometheus-targets1.png)
 
 ---
 
 ## Alert Firing
+<img width="1918" height="436" alt="prometheus-alerts" src="https://github.com/user-attachments/assets/5e915d87-1859-49d8-abba-312ab21fd534" />
+
 
 ![Prometheus Alerts](./screenshots/alert-firing.png)
 
