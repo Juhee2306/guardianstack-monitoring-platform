@@ -10,7 +10,8 @@ The project combines observability, automation, cloud deployment, and infrastruc
 
 # Architecture Diagram
 
-<img width="1854" height="1234" alt="79044" src="https://github.com/user-attachments/assets/03334f21-1c2c-40e7-9ddc-fbf85667705e" />
+<img width="1854" height="1234" alt="79044" src="https://github.com/user-attachments/assets/9661810d-bb0f-4b66-948b-3938f59fd1c0" />
+
 
 ---
 
@@ -161,7 +162,8 @@ The deployment includes:
 
 ## Architecture Diagram
 
-![Architecture](./screenshots/architecture-diagram.png)
+<img width="1854" height="1234" alt="79044" src="https://github.com/user-attachments/assets/42fa9865-90e5-4f19-beb8-55c62bc51d2a" />
+
 
 ---
 
@@ -178,11 +180,8 @@ The deployment includes:
 ---
 
 ## Alert Firing
-<img width="1918" height="436" alt="prometheus-alerts" src="https://github.com/user-attachments/assets/5e915d87-1859-49d8-abba-312ab21fd534" />
+<img width="1918" height="436" alt="prometheus-alerts" src="https://github.com/user-attachments/assets/5e915d87-1859-49d8-abba-312ab21fd534" /><img width="1314" height="559" alt="github-actions-success" src="https://github.com/user-attachments/assets/38fa2e49-3940-417d-b72f-03a84300910b" />
 
-
-<img width="1897" height="875" alt="s3-incident-storage" src="https://github.com/user-attachments/assets/3d17e660-d1de-470a-bcd3-940c48433ee1" />
-<img width="1897" height="875" alt="s3-incident-storage" src="https://github.com/user-attachments/assets/db154a52-ba91-4b95-923b-f3090f869cb5" />
 
 ---
 
@@ -200,7 +199,8 @@ The deployment includes:
 
 ## GitHub Actions CI/CD
 
-![GitHub Actions](./screenshots/github-actions-success.png)
+
+<img width="1314" height="559" alt="github-actions-success" src="https://github.com/user-attachments/assets/4632f5d4-bc4c-422a-a091-e8b6118c8ecb" />
 
 ---
 
