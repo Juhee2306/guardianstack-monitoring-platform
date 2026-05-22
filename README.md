@@ -160,13 +160,6 @@ The deployment includes:
 
 # Screenshots
 
-## Architecture Diagram
-
-<img width="1854" height="1234" alt="79044" src="https://github.com/user-attachments/assets/42fa9865-90e5-4f19-beb8-55c62bc51d2a" />
-
-
----
-
 ## Grafana Dashboard
 
 ![Grafana Dashboard](./screenshots/grafana-dashboard.png)
@@ -228,7 +221,7 @@ guardianstack/
 ## 1. Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/guardianstack-monitoring-platform.git
+git clone https://github.com/Juhee2306/guardianstack-monitoring-platform.git
 cd guardianstack-monitoring-platform
 ```
 
@@ -256,10 +249,10 @@ docker compose up --build -d
 
 | Service | URL |
 |---|---|
-| Main Application | `http://YOUR_PUBLIC_IP` |
-| Grafana | `http://YOUR_PUBLIC_IP:3000` |
-| Prometheus | `http://YOUR_PUBLIC_IP:9090` |
-| Alertmanager | `http://YOUR_PUBLIC_IP:9093` |
+| Main Application | `http://PUBLIC_IP` |
+| Grafana | `http://PUBLIC_IP:3000` |
+| Prometheus | `http://PUBLIC_IP:9090` |
+| Alertmanager | `http://PUBLIC_IP:9093` |
 
 ---
 
