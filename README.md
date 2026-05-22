@@ -10,7 +10,7 @@ The project combines observability, automation, cloud deployment, and infrastruc
 
 # Architecture Diagram
 
-![GuardianStack Architecture](./screenshots/architecture-diagram.png)
+<img width="1854" height="1234" alt="79044" src="https://github.com/user-attachments/assets/03334f21-1c2c-40e7-9ddc-fbf85667705e" />
 
 ---
 
@@ -181,7 +181,8 @@ The deployment includes:
 <img width="1918" height="436" alt="prometheus-alerts" src="https://github.com/user-attachments/assets/5e915d87-1859-49d8-abba-312ab21fd534" />
 
 
-![Prometheus Alerts](./screenshots/alert-firing.png)
+<img width="1897" height="875" alt="s3-incident-storage" src="https://github.com/user-attachments/assets/3d17e660-d1de-470a-bcd3-940c48433ee1" />
+<img width="1897" height="875" alt="s3-incident-storage" src="https://github.com/user-attachments/assets/db154a52-ba91-4b95-923b-f3090f869cb5" />
 
 ---
 
@@ -193,7 +194,7 @@ The deployment includes:
 
 ## AWS S3 Incident Storage
 
-![S3 Storage](./screenshots/s3-incidents.png)
+![S3 Storage](./screenshots/s3-incident-storage.png)
 
 ---
 
@@ -205,7 +206,8 @@ The deployment includes:
 
 # Project Structure
 
-```text
+```text<img width="1854" height="1234" alt="79044" src="https://github.com/user-attachments/assets/0166db3d-5bb3-4dd4-a8e3-deeb09e72d00" />
+
 guardianstack/
 │
 ├── app/
