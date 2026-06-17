@@ -299,6 +299,51 @@ This project helped strengthen practical skills in:
 
 ---
 
+## Kubernetes Migration
+
+GuardianStack has been migrated from Docker Compose to Kubernetes using Minikube.
+
+### Components Migrated
+- Flask Application
+- Prometheus
+- Alertmanager
+- Webhook Service
+
+### Kubernetes Resources
+- Deployments
+- Services
+- ConfigMaps
+- Alert Rules
+
+### Alert Flow
+
+Flask Application
+      ↓
+Prometheus
+      ↓
+Alertmanager
+      ↓
+Webhook
+      ↓
+Incident JSON Files
+
+### Validation
+
+Successfully tested:
+
+Flask Down
+      ↓
+Prometheus Alert Fired
+      ↓
+Alertmanager Received Alert
+      ↓
+Webhook Generated Incident Files
+
+Current limitation:
+AWS S3 upload requires Kubernetes Secrets for credentials.
+
+---
+
 # Author
 
 **Juhee Lavanya**
