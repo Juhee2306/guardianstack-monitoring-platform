@@ -20,15 +20,14 @@ The project combines observability, automation, cloud deployment, and infrastruc
 - Reverse proxy using NGINX
 - Flask application with custom Prometheus metrics
 - Real-time infrastructure and container monitoring
-- Prometheus metrics collection and alert evaluation
-- Alert routing using Alertmanager
+- Alerting using Prometheus and Alertmanager
 - Automated webhook-based incident handling
 - Incident archival to AWS S3
-- Grafana dashboards for visualization
-- Docker Compose orchestration
-- CI/CD automation using GitHub Actions
-- Automatic deployment to AWS EC2
-- Multi-container cloud deployment
+- Grafana dashboards
+- Docker Compose deployment
+- Kubernetes deployment
+- CI/CD using GitHub Actions
+- AWS EC2 deployment
 
 ---
 
@@ -85,6 +84,53 @@ Incident Uploaded to AWS S3
 | Node Exporter | Host metrics | 9100 |
 | Webhook Service | Incident processing | 5001 |
 
+---
+## Kubernetes Migration
+
+GuardianStack was originally deployed using Docker Compose and later migrated to Kubernetes using Minikube.
+
+### Kubernetes Components
+
+* Flask Application
+* Prometheus
+* Alertmanager
+* Webhook Service
+
+### Kubernetes Resources
+
+* Deployments
+* Services
+* ConfigMaps
+* Secrets
+* Alert Rules
+
+### Validation
+
+The complete monitoring and incident management workflow was validated through end-to-end failure testing.
+
+```text
+Application Failure
+        ↓
+Prometheus Alert
+        ↓
+Alertmanager Notification
+        ↓
+Webhook Processing
+        ↓
+Incident Storage
+```
+
+### Outcome
+
+Successfully validated:
+
+* Prometheus alert generation
+* Alertmanager alert routing
+* Webhook-based incident processing
+* Incident JSON generation
+* AWS S3 incident storage integration
+* Kubernetes Secret-based credential management
+  
 ---
 
 # Monitoring Stack
@@ -208,6 +254,7 @@ guardianstack/
 ├── prometheus/
 ├── alertmanager/
 ├── incident-logger/
+├── k8s/
 ├── screenshots/
 ├── .github/workflows/
 ├── docker-compose.yml
@@ -260,26 +307,14 @@ docker compose up --build -d
 
 Some real-world engineering challenges encountered during development:
 
-- Docker container networking issues
-- Prometheus `/metrics` endpoint debugging
-- YAML indentation and configuration errors
-- GitHub Actions workflow permission issues
-- SSH authentication for automated deployment
-- AWS credential mounting inside containers
-- Container rebuild and orchestration debugging
-- Prometheus alert rule validation
-
----
-
-# Future Improvements
-
-- Terraform Infrastructure as Code
-- Kubernetes deployment
-- HTTPS with NGINX and Certbot
-- Authentication for Grafana dashboards
-- Slack/Discord alert integration
-- Centralized logging stack
-- Multi-environment deployments
+- Challenges Faced
+- Docker networking issues
+- Prometheus metrics debugging
+- Alertmanager integration
+- Kubernetes ConfigMaps
+- Kubernetes Secrets
+- AWS credential management
+- Alert pipeline validation
 
 ---
 
@@ -289,6 +324,7 @@ This project helped strengthen practical skills in:
 
 - Linux server management
 - Docker orchestration
+- Kubernetes
 - Cloud deployment on AWS
 - Infrastructure monitoring
 - Observability engineering
@@ -308,40 +344,7 @@ GuardianStack has been migrated from Docker Compose to Kubernetes using Minikube
 - Prometheus
 - Alertmanager
 - Webhook Service
-
-### Kubernetes Resources
-- Deployments
-- Services
-- ConfigMaps
-- Alert Rules
-
-### Alert Flow
-
-Flask Application
-      ↓
-Prometheus
-      ↓
-Alertmanager
-      ↓
-Webhook
-      ↓
-Incident JSON Files
-
-### Validation
-
-Successfully tested:
-
-Flask Down
-      ↓
-Prometheus Alert Fired
-      ↓
-Alertmanager Received Alert
-      ↓
-Webhook Generated Incident Files
-
-Current limitation:
-AWS S3 upload requires Kubernetes Secrets for credentials.
-
+  
 ---
 
 # Author
