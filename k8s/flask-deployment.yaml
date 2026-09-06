@@ -5,7 +5,7 @@ metadata:
   name: flask-app
 
 spec:
-  replicas: 1
+  replicas: 2
 
   selector:
     matchLabels:
@@ -18,10 +18,31 @@ spec:
 
     spec:
       containers:
-      - name: flask-app
-        image: guardianstack-app:latest
+        - name: flask-app
+          image: guardianstack-app:v3
+          imagePullPolicy: Never
 
-        imagePullPolicy: Never
+          ports:
+            - containerPort: 5000
 
-        ports:
-        - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 20
+
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "256Mi"
