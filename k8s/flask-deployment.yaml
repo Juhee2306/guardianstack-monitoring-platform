@@ -19,11 +19,15 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: guardianstack-app:v3
+          image: guardianstack-app:v5
           imagePullPolicy: Never
 
           ports:
             - containerPort: 5000
+
+          envFrom:
+            - configMapRef:
+                name: flask-config
 
           readinessProbe:
             httpGet:
