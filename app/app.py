@@ -9,7 +9,7 @@ metrics = PrometheusMetrics(app)
 @app.route("/")
 def home():
     hostname = os.getenv("HOSTNAME", "unknown")
-    return f"GuardianStack is running on {hostname}!"
+    return f"GuardianStack v6 running on {hostname}!"
 
 @app.route("/health")
 def health():
