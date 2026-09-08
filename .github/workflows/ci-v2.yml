@@ -67,3 +67,71 @@ jobs:
       - name: Cleanup
         if: always()
         run: docker rm -f guardian-app-ci
+  kubernetes:
+    runs-on: ubuntu-latest
+    needs: docker
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install kind
+        run: |
+          curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.33.0/kind-linux-amd64
+          chmod +x ./kind
+          sudo mv ./kind /usr/local/bin/kind
+
+      - name: Create Kubernetes cluster
+        run: kind create cluster --name guardian-ci --wait 60s
+
+      - name: Build application image
+        run: docker build -t guardianstack-app:ci ./app
+
+      - name: Load application image into kind
+        run: kind load docker-image guardianstack-app:ci --name guardian-ci
+
+      - name: Prepare CI image tag
+        run: |
+          sed 's#guardianstack-app:v6#guardianstack-app:ci#' \
+            k8s/flask-deployment.yaml > /tmp/flask-deployment.yaml
+
+      - name: Validate Kubernetes manifests
+        run: |
+          kubectl apply --dry-run=server \
+            -f k8s/app-configmap.yaml \
+            -f /tmp/flask-deployment.yaml \
+            -f k8s/flask-service.yaml \
+            -f k8s/nginx-configmap.yaml \
+            -f k8s/nginx-deployment.yaml \
+            -f k8s/nginx-service.yaml
+
+      - name: Deploy GuardianStack
+        run: |
+          kubectl apply -f k8s/app-configmap.yaml
+          kubectl apply -f /tmp/flask-deployment.yaml
+          kubectl apply -f k8s/flask-service.yaml
+          kubectl apply -f k8s/nginx-configmap.yaml
+          kubectl apply -f k8s/nginx-deployment.yaml
+          kubectl apply -f k8s/nginx-service.yaml
+
+      - name: Wait for Flask rollout
+        run: kubectl rollout status deployment/flask-app --timeout=120s
+
+      - name: Wait for NGINX rollout
+        run: kubectl rollout status deployment/nginx --timeout=120s
+
+      - name: Show cluster state
+        run: |
+          kubectl get pods
+          kubectl get services
+          kubectl get endpointslice
+
+      - name: Test application through NGINX
+        run: |
+          kubectl port-forward service/nginx-service 8080:80 > /tmp/port-forward.log 2>&1 &
+          sleep 3
+          curl --fail http://localhost:8080/health
+
+      - name: Cleanup
+        if: always()
+        run: kind delete cluster --name guardian-ci
