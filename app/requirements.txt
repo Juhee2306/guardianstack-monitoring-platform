@@ -1,4 +1,5 @@
 flask
 prometheus-flask-exporter
 gunicorn
+pytest
 
