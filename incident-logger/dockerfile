@@ -4,10 +4,15 @@ WORKDIR /app
 
 COPY requirements.txt .
 
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
+RUN useradd --create-home appuser
+RUN mkdir -p incidents && chown -R appuser:appuser /app
+
+USER appuser
+
 EXPOSE 5001
 
-CMD ["python", "webhook.py"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5001", "webhook:app"]

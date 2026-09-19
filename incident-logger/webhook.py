@@ -6,24 +6,31 @@ import boto3
 
 app = Flask(__name__)
 
-s3 = boto3.client('s3')
+STORAGE_BACKEND = os.getenv("STORAGE_BACKEND", "local")
+BUCKET_NAME = os.getenv("S3_BUCKET", "guardianstack-incidents")
 
-BUCKET_NAME = "guardianstack-incidents"
 
-@app.route('/alert', methods=['POST'])
+@app.route("/alert", methods=["POST"])
 def alert():
-
     data = request.json
 
     os.makedirs("incidents", exist_ok=True)
 
-    filename = f'incidents/incident_{datetime.now().strftime("%Y%m%d_%H%M%S")}.json'
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+    filename = f"incidents/incident_{timestamp}.json"
 
-    with open(filename, 'w') as f:
+    with open(filename, "w") as f:
         json.dump(data, f, indent=4)
 
-    s3.upload_file(filename, BUCKET_NAME, os.path.basename(filename))
+    if STORAGE_BACKEND == "s3":
+        s3 = boto3.client("s3")
+        s3.upload_file(
+            filename,
+            BUCKET_NAME,
+            os.path.basename(filename),
+        )
 
-    return {"status": "incident logged and uploaded"}, 200
-
-app.run(host="0.0.0.0", port=5001)
+    return {
+        "status": "incident logged",
+        "storage_backend": STORAGE_BACKEND,
+    }, 200
