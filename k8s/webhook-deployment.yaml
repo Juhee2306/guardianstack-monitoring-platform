@@ -17,16 +17,16 @@ spec:
         app: webhook
 
     spec:
+      serviceAccountName: webhook
+
       containers:
-      - name: webhook
+        - name: webhook
+          image: guardianstack-webhook:v6
+          imagePullPolicy: Never
 
-        image: guardianstack-webhook:v2
+          env:
+            - name: STORAGE_BACKEND
+              value: "local"
 
-        imagePullPolicy: Never
-        
-        env:
-        - name: STORAGE_BACKEND
-          value: "local"
-
-        ports:
-        - containerPort: 5001
+          ports:
+            - containerPort: 5001
