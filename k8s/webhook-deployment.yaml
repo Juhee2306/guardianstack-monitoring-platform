@@ -21,12 +21,14 @@ spec:
 
       containers:
         - name: webhook
-          image: guardianstack-webhook:v6
+          image: guardianstack-webhook:v8
           imagePullPolicy: Never
 
           env:
             - name: STORAGE_BACKEND
               value: "local"
+            - name: REMEDIATION_ENABLED
+              value: "false"
 
           ports:
             - containerPort: 5001

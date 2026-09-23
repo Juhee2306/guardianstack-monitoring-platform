@@ -10,6 +10,7 @@ app = Flask(__name__)
 
 STORAGE_BACKEND = os.getenv("STORAGE_BACKEND", "local")
 BUCKET_NAME = os.getenv("S3_BUCKET", "guardianstack-incidents")
+REMEDIATION_ENABLED = os.getenv("REMEDIATION_ENABLED", "false").lower() == "true"
 
 # Use the Kubernetes ServiceAccount when running inside the cluster
 config.load_incluster_config()
@@ -65,7 +66,95 @@ def collect_flask_diagnostics():
         )
 
     return diagnostics
+def remediate_flask_app_down(alert_data):
+    results = []
 
+    if not REMEDIATION_ENABLED:
+        return {
+            "enabled": False,
+            "actions": [],
+        }
+
+    for alert in alert_data.get("alerts", []):
+        if alert.get("status") != "firing":
+            continue
+
+        labels = alert.get("labels", {})
+
+        if labels.get("alertname") != "FlaskAppDown":
+            continue
+
+        pod_name = labels.get("pod")
+
+        if not pod_name:
+            results.append(
+                {
+                    "action": "delete_pod",
+                    "status": "skipped",
+                    "reason": "alert did not contain a pod label",
+                }
+            )
+            continue
+        try:
+            pod = core_v1.read_namespaced_pod(
+                name=pod_name,
+                namespace="default",
+            )
+
+            flask_pods = core_v1.list_namespaced_pod(
+                namespace="default",
+                label_selector="app=flask",
+            )
+
+            if len(flask_pods.items) <= 1:
+                results.append(
+                    {
+                        "action": "delete_pod",
+                        "pod": pod_name,
+                        "status": "skipped",
+                        "reason": "refusing to delete the last Flask Pod",
+                    }
+                )
+                continue
+
+            if pod.metadata.labels.get("app") != "flask":
+                results.append(
+                    {
+                        "action": "delete_pod",
+                        "pod": pod_name,
+                        "status": "skipped",
+                        "reason": "pod is not labeled app=flask",
+                    }
+                )
+                continue
+
+            core_v1.delete_namespaced_pod(
+                name=pod_name,
+                namespace="default",
+            )
+
+            results.append(
+                {
+                    "action": "delete_pod",
+                    "pod": pod_name,
+                    "status": "executed",
+                }
+            )
+
+        except Exception as exc:
+            results.append(
+                {
+                    "action": "delete_pod",
+                    "pod": pod_name,
+                    "status": "failed",
+                    "error": str(exc),
+                }
+            )
+
+    return {
+        "enabled": True,
+        "actions": results,
+    }
 
 @app.route("/alert", methods=["POST"])
 def alert():
@@ -77,6 +166,7 @@ def alert():
         "diagnostics": {
             "flask_pods": collect_flask_diagnostics()
         },
+        "remediation": remediate_flask_app_down(data),
     }
 
     os.makedirs("incidents", exist_ok=True)
